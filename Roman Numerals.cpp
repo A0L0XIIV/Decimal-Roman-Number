@@ -22,6 +22,7 @@ int main(){
 	
 	int selection = 1;
 	int number = 0;
+	string numberStr{ 0 };
 	string roman{ 0 };
 
 	int currentCharacter;
@@ -43,22 +44,41 @@ int main(){
 			
 		else if(selection == 1){
 			cout << "Enter a number: " << endl;
-			cin >> number;
-			
-			//TODO: isdigit doesn't work
-			if( isdigit(number) ){
+
+			//Finish with enter button
+			while(currentCharacter != 13){
+				
+				currentCharacter = _getch();
+				numberStr += (int)currentCharacter;
+				cout << numberStr << endl;
+				
+				//TODO: There is a space character at the beginning
+				
+				//Ascii to integer
+				number += stoi(numberStr);
+				//number += (int)currentCharacter - '0';
+				cout << number << endl;
+				
 				decimalToRoman(number);
-			}else{
-				cout << "Enter digits only!" << endl;
+				cout << endl;
 			}
-			
 		}
 		
 		else if(selection == 2){
 			cout << "Enter a roman numeral: " << endl;
-			cin >> roman;
-			
-			romanToDecimal(roman);
+
+			//Finish with enter button
+			while(currentCharacter != 13){
+				currentCharacter = _getch();
+				roman += (char)currentCharacter;
+				
+				//TODO: There is a space character at the beginning
+				/*if(roman[0] == ' ')
+					roman = roman.substr(1);*/
+					
+				cout << roman << endl;
+				romanToDecimal(roman);
+			}
 
 		}
 
