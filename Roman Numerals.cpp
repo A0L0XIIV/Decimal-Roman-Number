@@ -12,12 +12,12 @@
 
 using namespace std;
 
-//Function prototypes
+// Function prototypes
 void decimalToRoman(int);
 void romanToDecimal(string roman);
 int doesContain(int number, int decimal);
 
-//Main function
+// Main function
 int main(){
 	
 	int selection = 1;
@@ -28,15 +28,17 @@ int main(){
 	int currentCharacter;
 	
 	while(selection != 0){
-		//system("cls");
+		system("cls");
 		
 		cout << "Enter 1 to Number to roman Numeral," <<
 		endl << "Enter 2 to roman Numeral to Number," <<
 		endl << "Enter 0 to terminate: ";
 		
-		//Sudden convert
-		//currentCharacter = _getch();
-		//cout << (char)currentCharacter;
+		/*Sudden convert method in conio.h library
+		currentCharacter = _getch();
+		cout << (char)currentCharacter;*/
+		
+		// Get user's choice
 		cin >> selection;
 		
 		if(selection == 0)
@@ -45,20 +47,30 @@ int main(){
 		else if(selection == 1){
 			cout << "Enter a number: " << endl;
 
-			//Finish with enter button
+			// Finish with enter button
 			while(currentCharacter != 13){
+				// Reset the number in every loop
+				number = 0;
 				
+				// Get inputs from user
 				currentCharacter = _getch();
+				
+				// Convert string to integer
 				numberStr += (int)currentCharacter;
-				cout << numberStr << endl;
 				
-				//TODO: There is a space character at the beginning
+				// It adds unneccesary character in the beginnig. Remove it
+				if(numberStr[0] == '\0'){
+					numberStr = numberStr.substr(1);
+				}
 				
-				//Ascii to integer
+				// Print user's input
+				cout << numberStr << ": ";
+				
+				// Ascii to integer
 				number += stoi(numberStr);
 				//number += (int)currentCharacter - '0';
-				cout << number << endl;
 				
+				// Call function, it prints its result
 				decimalToRoman(number);
 				cout << endl;
 			}
@@ -67,17 +79,25 @@ int main(){
 		else if(selection == 2){
 			cout << "Enter a roman numeral: " << endl;
 
-			//Finish with enter button
+			// Finish with enter button
 			while(currentCharacter != 13){
+				// Get inputs from user
 				currentCharacter = _getch();
+				
+				// Add new character into the roman string
 				roman += (char)currentCharacter;
 				
-				//TODO: There is a space character at the beginning
-				/*if(roman[0] == ' ')
-					roman = roman.substr(1);*/
+				// It adds unneccesary character in the beginnig. Remove it
+				if(roman[0] == '\0'){
+					roman = roman.substr(1);
+				}
 					
-				cout << roman << endl;
+				// Print user's input
+				cout << roman << ": ";
+				
+				// Call function, it prints its result
 				romanToDecimal(roman);
+				cout << endl;
 			}
 
 		}
@@ -87,7 +107,7 @@ int main(){
 	return 0;
 }
 
-//Decimal to romen number function
+// Decimal to romen number function
 void decimalToRoman(int number){
 	
 	if(number >= 1000){
@@ -153,13 +173,16 @@ void decimalToRoman(int number){
 		
 }
 
-//Roman number to decimal function
+// Roman number to decimal function
 void romanToDecimal(string roman){
 	
 	int number = 0;
+	int numOfIs = 0;	// User can use max 3 I characters
+	int numOfVs = 0;	// User can use max 1 V character
 	int lenght = roman.length();
 
 	for(int i=0; i<lenght; i++){
+		
 		switch(roman[i]){
 			case 'C':
 			case 'c':
@@ -179,11 +202,24 @@ void romanToDecimal(string roman){
 				break;
 			case 'V':
 			case 'v':
-				number += 5;
+				numOfVs++;
+				// Check number of V's
+				if(numOfVs > 1){
+					cout << "Romen number cannot have more than 1 V." << endl;
+					return;
+				}
+				number += 5;		
 				break;
 			case 'I':
 			case 'i':
+				numOfIs++;
+				// Check number of I's
+				if(numOfIs > 3){
+					cout << "Romen number cannot have more than 3 I." << endl;
+					return;
+				}
 				number += 1;
+				// In case of IV and IX --> decrease the number by 2
 				if(roman[i+1] == 'V' || roman[i+1] == 'v' || roman[i+1] == 'X' || roman[i+1] == 'x'){
 					number -= 2;
 				}
@@ -196,7 +232,7 @@ void romanToDecimal(string roman){
 	cout << number;	
 }
 
-//Check for 10x numbers. If it contains return number of decimal
+// Check for 10x numbers. If it contains return number of decimal
 int doesContain(int number, int decimal){
 	int result = 0;
 	
