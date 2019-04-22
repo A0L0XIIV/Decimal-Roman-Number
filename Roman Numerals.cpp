@@ -46,6 +46,9 @@ int main(){
 			
 		else if(selection == 1){
 			cout << "Enter a number: " << endl;
+			
+			// Reset current character for _getch function
+			currentCharacter = '\0';
 
 			// Finish with enter button
 			while(currentCharacter != 13){
@@ -78,6 +81,9 @@ int main(){
 		
 		else if(selection == 2){
 			cout << "Enter a roman numeral: " << endl;
+			
+			// Reset current character for _getch function
+			currentCharacter = '\0';
 
 			// Finish with enter button
 			while(currentCharacter != 13){
@@ -205,7 +211,7 @@ void romanToDecimal(string roman){
 				numOfVs++;
 				// Check number of V's
 				if(numOfVs > 1){
-					cout << "Romen number cannot have more than 1 V." << endl;
+					cout << "Romen number cannot have more than 1 V.";
 					return;
 				}
 				number += 5;		
@@ -215,7 +221,7 @@ void romanToDecimal(string roman){
 				numOfIs++;
 				// Check number of I's
 				if(numOfIs > 3){
-					cout << "Romen number cannot have more than 3 I." << endl;
+					cout << "Romen number cannot have more than 3 I.";
 					return;
 				}
 				number += 1;
