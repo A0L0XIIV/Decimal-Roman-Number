@@ -2,6 +2,7 @@
 *				*
 *	Baran Kaya	*
 *	  -2019-	*
+*				*
 *****************/
 
 #include <iostream>
@@ -115,38 +116,67 @@ int main(){
 
 // Decimal to romen number function
 void decimalToRoman(int number){
+
+	if (number > 3999 || number < 0) {
+		cout << "Only 0 < number < 3999 accepted." << endl;
+		return;
+	}
 	
 	if(number >= 1000){
 		int numberOfThousands = (number / 1000);
-		
+		// each 1000 --> M
 		for(int i=0; i<numberOfThousands; i++)
-			cout << "C";
+			cout << 'M';
 	}
 	
 	if(number >= 100){
 		int numberOfHundreds = (number % 1000) / 100;
-	
-		for(int i=0; i<numberOfHundreds; i++)
-			cout << "M";
+		// 900 --> CM
+		if (numberOfHundreds >= 9) {
+			cout << "CM";
+			numberOfHundreds -= 9;
+		}
+		// 500 --> D
+		else if (numberOfHundreds >= 5) {
+			cout << 'D';
+			numberOfHundreds -= 5;
+		}
+		// 400 --> CD
+		else if (numberOfHundreds >= 4) {
+			cout << "CD";
+			numberOfHundreds -= 4;
+		}
+		// each 100 --> C
+		for (int i = 0; i < numberOfHundreds; ++i)
+			cout << 'C';
 	}
 	
 	if(number >= 10){
 		int numberOfTens = (number % 100) / 10;
-		
-		if(numberOfTens >= 5){
-			cout << "L";
-			for(int i=0; i<(numberOfTens - 5); i++)
-				cout << "X";
-			
-		}else{
-			for(int i=0; i<numberOfTens; i++)
-				cout << "X";
+		// 90 --> XC
+		if (numberOfTens >= 9) {
+			cout << "XC";
+			numberOfTens -= 9;
 		}
+		// 50 --> L
+		else if (numberOfTens >= 5) {
+			cout << 'L';
+			numberOfTens -= 5;
+		}
+		// 40 --> XL
+		else if (numberOfTens >= 4) {
+			cout << "XL";
+			numberOfTens -= 4;
+		}
+		// each 10 --> X
+		for(int i=0; i<numberOfTens; ++i)
+			cout << 'X';
 	}
 
+	// Ones
 	switch(number % 10){
 		case 1:
-			cout << "I";
+			cout << 'I';
 			break;
 		case 2:
 			cout << "II";
@@ -173,10 +203,9 @@ void decimalToRoman(int number){
 			cout << "IX";
 			break;
 		default:
-			cout << "_";
 			break;
 	}
-		
+	return;
 }
 
 // Roman number to decimal function
@@ -185,33 +214,59 @@ void romanToDecimal(string roman){
 	int number = 0;
 	int numOfIs = 0;	// User can use max 3 I characters
 	int numOfVs = 0;	// User can use max 1 V character
+	int numOfLs = 0;	// User can use max 1 L character
+	int numOfDs = 0;	// User can use max 1 D character
 	int lenght = roman.length();
 
 	for(int i=0; i<lenght; i++){
 		
 		switch(roman[i]){
-			case 'C':
-			case 'c':
-				number += 1000;
-				break;
 			case 'M':
 			case 'm':
+				number += 1000;
+				break;
+			case 'D':
+			case 'd':
+				numOfDs++;
+				// Check number of V's
+				if (numOfDs > 1) {
+					cout << "Roman number cannot contain more than 1 D.";
+					return;
+				}
+				number += 500;
+				break;
+			case 'C':
+			case 'c':
 				number += 100;
+				// In case of CD and CM --> decrease the number by 200
+				if (roman[i + 1] == 'L' || roman[i + 1] == 'l' || roman[i + 1] == 'C' || roman[i + 1] == 'c') {
+					number -= 200;
+				}
 				break;
 			case 'L':
 			case 'l':
+				numOfLs++;
+				// Check number of V's
+				if (numOfLs > 1) {
+					cout << "Roman number cannot contain more than 1 L.";
+					return;
+				}
 				number += 50;
 				break;
 			case 'X':
 			case 'x':
 				number += 10;
+				// In case of XL and XC --> decrease the number by 20
+				if (roman[i + 1] == 'L' || roman[i + 1] == 'l' || roman[i + 1] == 'C' || roman[i + 1] == 'c') {
+					number -= 20;
+				}
 				break;
 			case 'V':
 			case 'v':
 				numOfVs++;
 				// Check number of V's
 				if(numOfVs > 1){
-					cout << "Romen number cannot have more than 1 V.";
+					cout << "Roman number cannot contain more than 1 V.";
 					return;
 				}
 				number += 5;		
@@ -221,7 +276,7 @@ void romanToDecimal(string roman){
 				numOfIs++;
 				// Check number of I's
 				if(numOfIs > 3){
-					cout << "Romen number cannot have more than 3 I.";
+					cout << "Roman number cannot contain more than 3 I.";
 					return;
 				}
 				number += 1;
@@ -231,7 +286,7 @@ void romanToDecimal(string roman){
 				}
 				break;
 			default:
-				cout << "Incorrect character in romen number" << endl;
+				cout << "Incorrect character in the roman number" << endl;
 				return;
 		}		
 	}	
